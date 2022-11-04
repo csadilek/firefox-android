@@ -16,6 +16,11 @@ buildscript {
     }
 
     dependencies {
+        // We could either keep trying to (1) get classpath to work with relative path or (2) we
+        // could convert to regular project (See tooling-nimbus-gradle).
+        // Longer term have root buildSrc directory that could be shared.
+        // Debug steps: Launch with debug flags to see what the actual path is below.
+        classpath files("$rootProject/../android-components/buildSrc")
         classpath Dependencies.android_gradle_plugin
         classpath Dependencies.kotlin_gradle_plugin
         classpath "org.mozilla.components:tooling-glean-gradle:${AndroidComponents.VERSION}"
@@ -53,6 +58,25 @@ allprojects {
         }
         maven {
             url "https://maven.mozilla.org/maven2"
+        }
+    }
+}
+
+subprojects {
+    // Define a reusable task for updating the version in manifest.json for modules that package
+    // a web extension. We automate this to make sure we never forget to update the version, either
+    // in local development or for releases. In both cases, we want to make sure the latest version
+    // of all extensions (including their latest changes) are installed on first start-up.
+    ext.updateExtensionVersion = { task, extDir ->
+        configure(task) {
+            from extDir
+            include 'manifest.template.json'
+            rename { 'manifest.json' }
+            into extDir
+
+            def values = ['version': rootProject.ext.config.componentsVersion + "." + new Date().format('MMddHHmmss')]
+            inputs.properties(values)
+            expand(values)
         }
     }
 }

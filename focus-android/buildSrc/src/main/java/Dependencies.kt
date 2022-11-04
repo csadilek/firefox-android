@@ -12,19 +12,27 @@ object Versions {
         const val annotation = "1.5.0"
         const val appcompat = "1.3.0"
         const val arch = "2.1.0"
+        const val autofill = "1.1.0"
+        const val biometric = "1.1.0"
         const val browser = "1.3.0"
         const val cardview = "1.0.0"
         const val compose = "1.3.0"
         const val constraint_layout = "2.1.4"
         const val constraint_layout_compose = "1.0.1"
+        const val coordinatorlayout = "1.1.0"
         const val core = "1.9.0"
         const val fragment = "1.5.2"
         const val lifecycle = "2.5.1"
+        const val localbroadcastmanager = "1.0.0"
+        const val media = "1.2.0"
+        const val paging = "2.1.2"
         const val palette = "1.0.0"
         const val preference = "1.1.1"
         const val recyclerview = "1.2.0"
+        const val room = "2.4.3"
         const val savedstate = "1.2.0"
         const val splashscreen = "1.0.0"
+        const val swiperefreshlayout = "1.1.0"
         const val transition = "1.4.0"
         const val work = "2.7.1"
     }
@@ -57,7 +65,7 @@ object Versions {
         const val junit = "5.9.1"
         const val ktlint = "0.47.1"
         const val mockito = "3.12.4"
-        const val mockwebserver = "4.10.0"
+        const val mockwebserver = "3.10.0"
         const val robolectric = "4.9"
     }
 
@@ -72,7 +80,41 @@ object Versions {
     // https://github.com/gradle/gradle/issues/9251
     const val google_compose_compiler = Versions.Google.compose_compiler
     const val ktlint_version = Versions.Testing.ktlint
+
+    // AC Alias
+    const val compose_compiler = google_compose_compiler
+    const val mozilla_glean = "51.7.0"
+    const val disklrucache = "2.0.2"
+    const val junit = "4.13.2"
+    const val mozilla_appservices = "94.3.2"
+    const val maven_ant_tasks = "2.1.3"
+    const val okhttp = "3.13.1"
+    const val sentry_latest = "6.6.0"
 }
+
+object Gecko {
+    /**
+     * GeckoView Version.
+     */
+    const val version = "108.0.20221103095349"
+
+    /**
+     * GeckoView channel
+     */
+    val channel = GeckoChannel.NIGHTLY
+}
+
+/**
+ * Enum for GeckoView release channels.
+ */
+enum class GeckoChannel(
+    val artifactName: String,
+) {
+    NIGHTLY("geckoview-nightly-omni"),
+    BETA("geckoview-beta-omni"),
+    RELEASE("geckoview-omni"),
+}
+
 
 object Dependencies {
     const val androidx_annotation = "androidx.annotation:annotation:${Versions.AndroidX.annotation}"
@@ -141,4 +183,45 @@ object Dependencies {
     const val testing_junit_api = "org.junit.jupiter:junit-jupiter-api:${Versions.Testing.junit}"
     const val testing_junit_engine = "org.junit.jupiter:junit-jupiter-engine:${Versions.Testing.junit}"
     const val testing_junit_params = "org.junit.jupiter:junit-jupiter-params:${Versions.Testing.junit}"
+
+    // AC Alias
+    const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Kotlin.compiler}"
+    const val androidx_test_junit = androidx_junit_ktx
+    val mozilla_geckoview = "org.mozilla.geckoview:${Gecko.channel.artifactName}:${Gecko.version}"
+    const val androidx_paging = "androidx.paging:paging-runtime:${Versions.AndroidX.paging}"
+    const val thirdparty_disklrucache = "com.jakewharton:disklrucache:${Versions.disklrucache}"
+    const val kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.Kotlin.compiler}"
+    const val androidx_constraintlayout = androidx_constraint_layout
+    const val androidx_coordinatorlayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.AndroidX.coordinatorlayout}"
+    const val androidx_lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.AndroidX.lifecycle}"
+    const val androidx_test_uiautomator = androidx_uiautomator
+    const val androidx_espresso_core = espresso_core
+    const val testing_leakcanary = "com.squareup.leakcanary:leakcanary-android-instrumentation:${Versions.ThirdParty.leakcanary}"
+    const val testing_junit = "junit:junit:${Versions.junit}"
+    const val mozilla_places = "org.mozilla.appservices:places:${Versions.mozilla_appservices}"
+    const val mozilla_remote_tabs = "org.mozilla.appservices:tabs:${Versions.mozilla_appservices}"
+    const val androidx_work_runtime = androidx_work_ktx
+//    const val mozilla_full_megazord_forUnitTests = "org.mozilla.appservices:full-megazord-forUnitTests:${Versions.mozilla_appservices}"
+    const val mozilla_glean_forUnitTests = "org.mozilla.telemetry:glean-native-forUnitTests:${Versions.mozilla_glean}"
+    const val androidx_core = "androidx.core:core:${Versions.AndroidX.core}"
+    const val androidx_room_runtime = "androidx.room:room-ktx:${Versions.AndroidX.room}"
+    const val androidx_room_compiler = "androidx.room:room-compiler:${Versions.AndroidX.room}"
+    const val androidx_room_testing = "androidx.room:room-testing:${Versions.AndroidX.room}"
+//    const val androidx_autofill = "androidx.autofill:autofill:${Versions.AndroidX.autofill}"
+    const val androidx_biometric = "androidx.biometric:biometric:${Versions.AndroidX.biometric}"
+//    const val androidx_preferences = androidx_preference
+    const val androidx_lifecycle_livedata = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}"
+    const val androidx_arch_core_common = "androidx.arch.core:core-common:${Versions.AndroidX.arch}"
+    const val testing_maven_ant_tasks = "org.apache.maven:maven-ant-tasks:${Versions.maven_ant_tasks}"
+    const val mozilla_httpconfig = "org.mozilla.appservices:httpconfig:${Versions.mozilla_appservices}"
+    const val mozilla_rustlog = "org.mozilla.appservices:rustlog:${Versions.mozilla_appservices}"
+    const val mozilla_sync15 = "org.mozilla.appservices:sync15:${Versions.mozilla_appservices}"
+    const val mozilla_full_megazord_forUnitTests = "org.mozilla.appservices:full-megazord-forUnitTests:${Versions.mozilla_appservices}"
+    const val mozilla_nimbus = "org.mozilla.appservices:nimbus:${Versions.mozilla_appservices}"
+    const val thirdparty_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
+    const val thirdparty_okhttp_urlconnection = "com.squareup.okhttp3:okhttp-urlconnection:${Versions.okhttp}"
+    const val androidx_media = "androidx.media:media:${Versions.AndroidX.media}"
+    const val thirdparty_sentry_latest = "io.sentry:sentry-android:${Versions.sentry_latest}"
+    const val androidx_swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.AndroidX.swiperefreshlayout}"
+    const val androidx_localbroadcastmanager = "androidx.localbroadcastmanager:localbroadcastmanager:${Versions.AndroidX.localbroadcastmanager}"
 }
