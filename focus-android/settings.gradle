@@ -4,6 +4,8 @@
 
 import org.yaml.snakeyaml.Yaml
 
+includeBuild("../android-components/publicsuffixlist-plugin")
+
 buildscript {
     repositories {
         mavenCentral()

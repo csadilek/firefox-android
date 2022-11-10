@@ -4,6 +4,8 @@
 
 import org.yaml.snakeyaml.Yaml
 
+includeBuild("publicsuffixlist-plugin")
+
 buildscript {
     repositories {
         if (hasProperty("centralRepo")) {
