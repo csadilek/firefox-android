@@ -4,6 +4,8 @@
 
 import org.yaml.snakeyaml.Yaml
 
+includeBuild("plugins/dependencies")
+
 buildscript {
     repositories {
         if (hasProperty("centralRepo")) {
