@@ -4,6 +4,10 @@
 
 package mozilla.components.feature.search
 
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import mozilla.components.browser.state.action.ContentAction
 import mozilla.components.browser.state.action.SearchAction
 import mozilla.components.browser.state.search.SearchEngine
@@ -77,16 +81,21 @@ class SearchUseCases(
 
             val id = if (sessionId == null) {
                 // If no `sessionId` was passed in then create a new tab
-                tabsUseCases.addTab(searchUrl)
+                tabsUseCases.addTab(searchUrl, isSearch = true)
             } else {
                 // If we got a `sessionId` then try to find the tab and load the search URL in it
                 val existingTab = store.state.findTabOrCustomTab(sessionId)
                 if (existingTab != null) {
-                    sessionUseCases.loadUrl(searchUrl, sessionId = existingTab.id)
+                    store.dispatch(ContentAction.UpdateIsSearchAction(existingTab.id, true))
+                        .invokeOnCompletion @OptIn(DelicateCoroutinesApi::class) {
+                            GlobalScope.launch(Main) {
+                                sessionUseCases.loadUrl(searchUrl, sessionId = existingTab.id)
+                            }
+                        }
                     existingTab.id
                 } else {
                     // If the tab with the provided id was not found then create a new tab
-                    tabsUseCases.addTab(searchUrl)
+                    tabsUseCases.addTab(searchUrl, isSearch = true)
                 }
             }
 
@@ -150,6 +159,7 @@ class SearchUseCases(
                 source = source,
                 selectTab = selected,
                 private = private,
+                isSearch = true,
             )
 
             store.dispatch(ContentAction.UpdateSearchTermsAction(id, searchTerms))

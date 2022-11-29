@@ -100,6 +100,9 @@ class SearchUseCasesTest {
         val searchTermsAccessAction = middleware.findFirstAction(ContentAction.UpdateSearchTermsAction::class)
         assertEquals(searchTerms, searchTermsAccessAction.searchTerms)
         assertEquals("mozilla", searchTermsAccessAction.sessionId)
+        val isSearchAction = middleware.findFirstAction(ContentAction.UpdateIsSearchAction::class)
+        assertEquals("mozilla", isSearchAction.sessionId)
+        assertEquals(true, isSearchAction.isSearch)
     }
 
     @Test
@@ -108,7 +111,7 @@ class SearchUseCasesTest {
 
         val newTabUseCase: TabsUseCases.AddNewTabUseCase = mock()
         whenever(tabsUseCases.addTab).thenReturn(newTabUseCase)
-        whenever(newTabUseCase(searchUrl)).thenReturn("2342")
+        whenever(newTabUseCase(searchUrl, isSearch = true)).thenReturn("2342")
 
         useCases.newTabSearch(searchTerms, SessionState.Source.Internal.NewTab)
         store.waitUntilIdle()
@@ -118,6 +121,7 @@ class SearchUseCasesTest {
             parentId = null,
             selectTab = true,
             source = SessionState.Source.Internal.NewTab,
+            isSearch = true,
         )
 
         val searchTermsAction = middleware.findFirstAction(ContentAction.UpdateSearchTermsAction::class)
@@ -129,7 +133,7 @@ class SearchUseCasesTest {
     fun `DefaultSearchUseCase creates new tab if no session is selected`() {
         val newTabUseCase: TabsUseCases.AddNewTabUseCase = mock()
         whenever(tabsUseCases.addTab).thenReturn(newTabUseCase)
-        whenever(newTabUseCase(searchUrl)).thenReturn("2342")
+        whenever(newTabUseCase(searchUrl, isSearch = true)).thenReturn("2342")
 
         useCases.defaultSearch(searchTerms)
         store.waitUntilIdle()
@@ -139,6 +143,7 @@ class SearchUseCasesTest {
             parentId = null,
             selectTab = true,
             source = SessionState.Source.Internal.NewTab,
+            isSearch = true,
         )
 
         val searchTermsAction = middleware.findFirstAction(ContentAction.UpdateSearchTermsAction::class)
@@ -150,7 +155,14 @@ class SearchUseCasesTest {
     fun newPrivateTabSearch() {
         val newTabUseCase: TabsUseCases.AddNewTabUseCase = mock()
         whenever(tabsUseCases.addTab).thenReturn(newTabUseCase)
-        whenever(newTabUseCase(searchUrl, source = SessionState.Source.Internal.None, private = true)).thenReturn("1177")
+        whenever(
+            newTabUseCase(
+                searchUrl,
+                source = SessionState.Source.Internal.None,
+                private = true,
+                isSearch = true,
+            ),
+        ).thenReturn("1177")
 
         useCases.newPrivateTabSearch.invoke(searchTerms)
         store.waitUntilIdle()
@@ -161,6 +173,7 @@ class SearchUseCasesTest {
             selectTab = true,
             private = true,
             source = SessionState.Source.Internal.None,
+            isSearch = true,
         )
 
         val searchTermsAction = middleware.findFirstAction(ContentAction.UpdateSearchTermsAction::class)
@@ -172,7 +185,15 @@ class SearchUseCasesTest {
     fun newPrivateTabSearchWithParentSession() {
         val newTabUseCase: TabsUseCases.AddNewTabUseCase = mock()
         whenever(tabsUseCases.addTab).thenReturn(newTabUseCase)
-        whenever(newTabUseCase(searchUrl, source = SessionState.Source.Internal.None, parentId = "test-parent", private = true)).thenReturn("1177")
+        whenever(
+            newTabUseCase(
+                searchUrl,
+                source = SessionState.Source.Internal.None,
+                parentId = "test-parent",
+                private = true,
+                isSearch = true,
+            ),
+        ).thenReturn("1177")
 
         useCases.newPrivateTabSearch.invoke(searchTerms, parentSessionId = "test-parent")
 
@@ -184,6 +205,7 @@ class SearchUseCasesTest {
             selectTab = true,
             private = true,
             source = SessionState.Source.Internal.None,
+            isSearch = true,
         )
 
         val searchTermsAction = middleware.findFirstAction(ContentAction.UpdateSearchTermsAction::class)

@@ -24,4 +24,7 @@
     <file name="components/support/utils/src/main/java/mozilla/components/support/utils/intents.kt">
         <error line="1" column="1" source="filename" />
     </file>
+    <file name="components/feature/search/src/main/java/mozilla/components/feature/search/SearchUseCases.kt">
+        <error line="90" column="45" source="annotation" />
+    </file>
 </baseline>
