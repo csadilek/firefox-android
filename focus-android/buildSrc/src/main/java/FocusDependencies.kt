@@ -63,6 +63,7 @@ object FocusVersions {
     }
 
     object ThirdParty {
+        const val jna = "5.13.0"
         const val leakcanary = "2.10"
         const val osslicenses_plugin = "0.10.4"
         const val sentry = "6.15.0"
@@ -110,6 +111,7 @@ object FocusDependencies {
     const val google_play = "com.google.android.play:core:${FocusVersions.Google.play}"
     const val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${FocusVersions.Gradle.kotlin_plugin}"
     const val android_gradle_plugin = "com.android.tools.build:gradle:${FocusVersions.Gradle.android_plugin}"
+    const val jna = "net.java.dev.jna:jna:${FocusVersions.ThirdParty.jna}@jar"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android-core:${FocusVersions.ThirdParty.leakcanary}"
     const val sentry = "io.sentry:sentry-android:${FocusVersions.ThirdParty.sentry}"
 
