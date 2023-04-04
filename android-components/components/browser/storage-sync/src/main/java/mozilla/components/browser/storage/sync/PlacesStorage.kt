@@ -9,7 +9,9 @@ import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
 import mozilla.appservices.places.PlacesReaderConnection
 import mozilla.appservices.places.PlacesWriterConnection
@@ -36,10 +38,30 @@ abstract class PlacesStorage(
             Executors.newSingleThreadExecutor(
                 NamedThreadFactory("PlacesStorageWriteScope"),
             ).asCoroutineDispatcher(),
-        )
+        ) +
+        CoroutineExceptionHandler { _, throwable ->
+            // Workaround for https://github.com/Kotlin/kotlinx.coroutines/issues/3328 to prevent
+            // adding DiagnosticCoroutineContextException as suppressed exception which is not
+            // serializable in 1.6.4. We are otherwise not able to serialize the exception and
+            // pass it to our crash reporter. Without a handler on the context, the global handler
+            // will otherwise add:
+            // runCatching { exception.addSuppressed(DiagnosticCoroutineContextException(context)) }
+            val currentThread = Thread.currentThread()
+            currentThread.uncaughtExceptionHandler.uncaughtException(currentThread, throwable)
+        }
         @VisibleForTesting internal set
 
-    internal var readScope = CoroutineScope(Dispatchers.IO)
+    internal var readScope = CoroutineScope(Dispatchers.IO) +
+        CoroutineExceptionHandler { _, throwable ->
+            // Workaround for https://github.com/Kotlin/kotlinx.coroutines/issues/3328 to prevent
+            // adding DiagnosticCoroutineContextException as suppressed exception which is not
+            // serializable in 1.6.4. We are otherwise not able to serialize the exception and
+            // pass it to our crash reporter. Without a handler on the context, the global handler
+            // will otherwise add:
+            // runCatching { exception.addSuppressed(DiagnosticCoroutineContextException(context)) }
+            val currentThread = Thread.currentThread()
+            currentThread.uncaughtExceptionHandler.uncaughtException(currentThread, throwable)
+        }
         @VisibleForTesting internal set
     private val storageDir by lazy { context.filesDir }
 
